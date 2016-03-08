@@ -36,14 +36,19 @@
  *  Requires GDI+. All linker dependencies are specified explicitly in this
  *  file, so you can compile screenshot.exe by simply running:
  *    cl screenshot.cpp
+ *
+ *  To compile with g++/MinGW32 run:
+ *    g++ -O3 screenshot.cpp -s -static -o screenshot.exe -municode -lgdi32 -lgdiplus
  */
 
 #include <windows.h>
 #include <gdiplus.h>
 
-#pragma comment(lib, "user32.lib")
-#pragma comment(lib, "gdi32.lib")
-#pragma comment(lib, "gdiplus.lib")
+#ifndef __MINGW32__
+  #pragma comment(lib, "user32.lib")
+  #pragma comment(lib, "gdi32.lib")
+  #pragma comment(lib, "gdiplus.lib")
+#endif
 
 using namespace Gdiplus;
 
