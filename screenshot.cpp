@@ -39,12 +39,28 @@
  *
  *  To compile with g++/MinGW32 run:
  *    g++ -O3 screenshot.cpp -s -static -o screenshot.exe -municode -lgdi32 -lgdiplus
+ *
+ *  For Cygwin or Msys use:
+ *    g++ -O3 screenshot.cpp -s -o screenshot.exe -lgdi32 -lgdiplus
  */
 
 #include <windows.h>
 #include <gdiplus.h>
 
-#ifndef __MINGW32__
+#undef _tmain
+#undef _TCHAR
+#if defined(__MSYS__) || defined(__CYGWIN__)
+  #include <locale.h>
+  #include <wchar.h>
+  #include <stdlib.h>
+  #define _tmain main
+  #define _TCHAR char
+#else
+  #define _tmain wmain
+  #define _TCHAR wchar_t
+#endif
+
+#if !defined(__MINGW32__) && !defined(__MSYS__) && !defined(__CYGWIN__)
   #pragma comment(lib, "user32.lib")
   #pragma comment(lib, "gdi32.lib")
   #pragma comment(lib, "gdiplus.lib")
@@ -84,8 +100,12 @@ int GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
   return -1;  // Failure
 }
 
-int wmain(int argc, wchar_t** argv)
+int _tmain(int argc, _TCHAR** argv)
 {
+#if defined(__MSYS__) || defined(__CYGWIN__)
+  setlocale(LC_ALL, "en_US.utf8");
+#endif
+
   GdiplusStartupInput gdiplusStartupInput;
   ULONG_PTR gdiplusToken;
   GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
@@ -100,7 +120,22 @@ int wmain(int argc, wchar_t** argv)
   BitBlt(mydc,0,0,width,height,desktopdc,0,0, SRCCOPY|CAPTUREBLT);
   SelectObject(mydc, oldbmp);
 
-  const wchar_t* filename = (argc > 1) ? argv[1] : L"screenshot.png";
+  const wchar_t* filename = L"screenshot.png";
+  if(argc > 1)
+  {
+#if defined(__MSYS__) || defined(__CYGWIN__)
+    const char* orig = argv[1];
+    mbstate_t state;
+    memset(&state, 0, sizeof state);
+    int len = 1 + mbsrtowcs(NULL, &orig, 0, &state);
+    wchar_t wstr[len];
+    mbsrtowcs(&wstr[0], &orig, len, &state);
+    filename = wstr;
+#else
+    filename = argv[1];
+#endif
+  }
+
   Bitmap* b = Bitmap::FromHBITMAP(mybmp, NULL);
   CLSID  encoderClsid;
   Status stat = GenericError;
