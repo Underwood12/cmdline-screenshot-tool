@@ -10,6 +10,9 @@ file, so you can compile screenshot.exe by simply running:
 To compile with g++/MinGW32 run:
   g++ -O3 screenshot.cpp -s -static -o screenshot.exe -municode -lgdi32 -lgdiplus
 
+For Cygwin or Msys use:
+  g++ -O3 screenshot.cpp -s -o screenshot.exe -lgdi32 -lgdiplus
+
 
 Source:
 https://blog.mozilla.org/ted/2009/02/05/command-line-screenshot-tool-for-windows/
