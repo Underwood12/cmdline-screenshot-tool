@@ -94,7 +94,7 @@ int screenshotSaveBitmap(Gdiplus::Bitmap *b, const wchar_t *filename, const wcha
 
   if (b) {
     if (getEncoderCLSID(format, &encoderClsid) != -1) {
-      if(quality >= 0 && quality <= 100 && (wcscmp(format, L"image/jpeg") == 0)) {
+      if (quality >= 0 && quality <= 100 && wcscmp(format, L"image/jpeg") == 0) {
         encoderParameters.Count = 1;
         encoderParameters.Parameter[0].Guid = Gdiplus::EncoderQuality;
         encoderParameters.Parameter[0].Type = Gdiplus::EncoderParameterValueTypeLong;
@@ -121,19 +121,19 @@ int getEncoderCLSID(const wchar_t *format, CLSID *pClsid)
   Gdiplus::ImageCodecInfo *pImageCodecInfo = NULL;
 
   Gdiplus::GetImageEncodersSize(&num, &size);
-  if(size == 0) {
+  if (size == 0) {
     return -1;  /* Failure */
   }
 
   pImageCodecInfo = (Gdiplus::ImageCodecInfo *)(malloc(size));
-  if(pImageCodecInfo == NULL) {
+  if (pImageCodecInfo == NULL) {
     return -1;  /* Failure */
   }
 
   GetImageEncoders(num, size, pImageCodecInfo);
 
-  for(UINT j = 0; j < num; ++j) {
-    if( wcscmp(pImageCodecInfo[j].MimeType, format) == 0 ) {
+  for (UINT j = 0; j < num; ++j) {
+    if (wcscmp(pImageCodecInfo[j].MimeType, format) == 0 ) {
       *pClsid = pImageCodecInfo[j].Clsid;
       free(pImageCodecInfo);
       return j;  /* Success */
