@@ -39,6 +39,9 @@
 
 #include <windows.h>
 #include <gdiplus.h>
+#if defined(__MSYS__) || defined(__CYGWIN__)
+#  include <wchar.h>
+#endif
 #include "screenshot-win32.hpp"
 
 ULONG_PTR screenshotGdiplusToken;
