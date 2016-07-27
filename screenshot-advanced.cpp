@@ -163,7 +163,7 @@ Gdiplus::Bitmap *ResizeBitmap(Gdiplus::Bitmap *source, int percentage)
   Gdiplus::Bitmap *b = new Gdiplus::Bitmap(w, h, source->GetPixelFormat());
   if (b) {
     Gdiplus::Graphics *g = Gdiplus::Graphics::FromImage(b);
-    if(g) {
+    if (g) {
       g->DrawImage(source, 0, 0, w, h);
       delete g;
     } else {
