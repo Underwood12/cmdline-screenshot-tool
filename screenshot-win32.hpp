@@ -66,7 +66,7 @@ Gdiplus::Bitmap *getScreenshot(void);
 int screenshotSaveBitmap(Gdiplus::Bitmap *b, const wchar_t *filename, const wchar_t *format = L"image/bmp", long quality = -1);
 
 /* Retrieve the Class Identifier for an encoder. */
-int getEncoderCLSID(const wchar_t *format, CLSID *pClsid);
+int getEncoderClsid(const wchar_t *format, CLSID *pClsid);
 
 /* shutdown Gdiplus */
 void screenshotFreeGdiplus(void);

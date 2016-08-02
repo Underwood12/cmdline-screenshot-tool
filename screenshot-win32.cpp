@@ -96,7 +96,7 @@ int screenshotSaveBitmap(Gdiplus::Bitmap *b, const wchar_t *filename, const wcha
   Gdiplus::Status stat = Gdiplus::GenericError;
 
   if (b) {
-    if (getEncoderCLSID(format, &encoderClsid) != -1) {
+    if (getEncoderClsid(format, &encoderClsid) != -1) {
       if (quality >= 0 && quality <= 100 && wcscmp(format, L"image/jpeg") == 0) {
         encoderParameters.Count = 1;
         encoderParameters.Parameter[0].Guid = Gdiplus::EncoderQuality;
@@ -116,7 +116,7 @@ int screenshotSaveBitmap(Gdiplus::Bitmap *b, const wchar_t *filename, const wcha
 
 /* From http://msdn.microsoft.com/en-us/library/ms533843%28VS.85%29.aspx
  */
-int getEncoderCLSID(const wchar_t *format, CLSID *pClsid)
+int getEncoderClsid(const wchar_t *format, CLSID *pClsid)
 {
   UINT num = 0;   /* number of image encoders */
   UINT size = 0;  /* size of the image encoder array in bytes */
